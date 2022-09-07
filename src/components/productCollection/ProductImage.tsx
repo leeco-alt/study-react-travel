@@ -1,6 +1,6 @@
 import React from 'react'
 import { Image, Typography } from 'antd'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 
 interface PropsType {
   id: string | number
@@ -14,7 +14,7 @@ export const ProductImage: React.FC<PropsType> = ({ id, size, imageSrc, price, t
   const navigate = useNavigate()
 
   return (
-    <div onClick={() => navigate(`detail/${id}`)}>
+    <Link to={`detail/${id}`}>
       {size === 'large' ? (
         <Image src={imageSrc} height={285} width={490} />
       ) : (
@@ -26,6 +26,6 @@ export const ProductImage: React.FC<PropsType> = ({ id, size, imageSrc, price, t
           ￥ {price} 起
         </Typography.Text>
       </div>
-    </div>
+    </Link>
   )
 }
