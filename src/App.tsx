@@ -1,6 +1,13 @@
 import React from 'react'
 import styles from './App.module.css'
-import { Header, Footer, Carousel, SideMenu, ProductCollection } from './components'
+import {
+  Header,
+  Footer,
+  Carousel,
+  SideMenu,
+  ProductCollection,
+  BusinessPartners
+} from './components'
 import { Row, Col, Typography } from 'antd'
 import { productList1, productList2, productList3 } from './mockups'
 
@@ -49,6 +56,7 @@ function App() {
           sideImage={sideImage3}
           products={productList3}
         />
+        <BusinessPartners />
       </div>
       <Footer />
     </div>
