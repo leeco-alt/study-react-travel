@@ -4,42 +4,28 @@ import { sideMenuList } from './mockup'
 import { Menu } from 'antd'
 import { GiftOutlined } from '@ant-design/icons'
 
-//
-export const SideMenu: React.FC = () => {
-  return (
-    <Menu mode="vertical" className={styles['side-menu']}>
-      {sideMenuList.map((m, index) => (
-        <Menu.SubMenu
-          key={`side-menu-${index}`}
-          title={
-            <span>
-              <GiftOutlined />
-              {m.title}
-            </span>
+const items = sideMenuList.map((m, index) => {
+  return {
+    label: m.title,
+    icon: <GiftOutlined />,
+    key: `side-menu-${index}`,
+    children: m.subMenu.map((sm, smindex) => {
+      return {
+        label: sm.title,
+        icon: <GiftOutlined />,
+        key: `sub-menu-${index}-${smindex}`,
+        children: sm.subMenu.map((sms, smsindex) => {
+          return {
+            label: sms,
+            icon: <GiftOutlined />,
+            key: `sub-menu-${index}-${smindex}-${smsindex}`
           }
-        >
-          {m.subMenu.map((sm, smindex) => (
-            <Menu.SubMenu
-              key={`sub-menu-${smindex}`}
-              title={
-                <span>
-                  <GiftOutlined />
-                  {sm.title}
-                </span>
-              }
-            >
-              {sm.subMenu.map((sms, smsindex) => (
-                <Menu.Item key={`sub-sub-menu-${smsindex}`}>
-                  <span>
-                    <GiftOutlined />
-                    {sms}
-                  </span>
-                </Menu.Item>
-              ))}
-            </Menu.SubMenu>
-          ))}
-        </Menu.SubMenu>
-      ))}
-    </Menu>
-  )
+        })
+      }
+    })
+  }
+})
+
+export const SideMenu: React.FC = () => {
+  return <Menu mode="vertical" className={styles['side-menu']} items={items} />
 }
