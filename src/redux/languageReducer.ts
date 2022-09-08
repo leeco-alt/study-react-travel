@@ -1,17 +1,22 @@
-interface LanguageState {
-  langeuage: 'en' | 'zh'
-  langeuageList: { name: string; code: string }[]
+export interface LanguageState {
+  language: 'en' | 'zh'
+  languageList: { name: string; code: string }[]
 }
 
 const defaultState: LanguageState = {
-  langeuage: 'zh',
-  langeuageList: [
+  language: 'zh',
+  languageList: [
     { name: '中文', code: 'zh' },
     { name: '英语', code: 'en' }
   ]
 }
 
 const languageReducer = (state = defaultState, action) => {
+  console.log(state, action)
+  if (action.type === 'change_language') {
+    const newState = { ...state, language: action.payload }
+    return newState
+  }
   return state
 }
 
