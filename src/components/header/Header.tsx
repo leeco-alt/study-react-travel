@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styles from './Header.module.css'
 import logo from '../../assets/logo.svg'
 import { Layout, Typography, Input, Menu, Button, Dropdown, Space } from 'antd'
@@ -13,9 +13,19 @@ export const Header: React.FC = () => {
   const match = useMatch(location.pathname)
   const navigate = useNavigate()
   const storeState = store.getState()
-  const state = {
+  const [state, setState] = useState({
     language: storeState.language,
     languageList: storeState.languageList
+  })
+
+  const menuClickHandler = (e) => {
+    // console.log(e)
+    // setState({ ...state, language: e.key }) // 这种方法只能改变此组件的状态
+    const action = {
+      type: 'change_language',
+      payload: e.key
+    }
+    store.dispatch(action)
   }
 
   return (
@@ -28,7 +38,7 @@ export const Header: React.FC = () => {
             style={{ marginLeft: 15 }}
             overlay={
               <Menu
-                onClick={() => {}}
+                onClick={menuClickHandler}
                 items={state.languageList.map((l) => ({ label: l.name, key: l.code }))}
               ></Menu>
             }
