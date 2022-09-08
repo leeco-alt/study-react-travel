@@ -18,15 +18,37 @@ export const Header: React.FC = () => {
     languageList: storeState.languageList
   })
 
+  store.subscribe(() => {
+    const storeState = store.getState()
+    setState({
+      ...state,
+      language: storeState.language,
+      languageList: storeState.languageList
+    })
+  })
+
   const menuClickHandler = (e) => {
     // console.log(e)
     // setState({ ...state, language: e.key }) // 这种方法只能改变此组件的状态
-    const action = {
-      type: 'change_language',
-      payload: e.key
+    if (e.key === 'new') {
+      // 处理新语言添加 action
+      const action = {
+        type: 'add_language',
+        payload: { code: 'new_lang' + Math.random(), name: '新语言' }
+      }
+      store.dispatch(action)
+    } else {
+      const action = {
+        type: 'change_language',
+        payload: e.key
+      }
+      store.dispatch(action)
     }
-    store.dispatch(action)
   }
+
+  const langMenuList = state.languageList
+    .map((l) => ({ label: l.name, key: l.code }))
+    .concat({ label: '添加新语言', key: 'new' })
 
   return (
     <div className={styles['app-header']}>
@@ -36,12 +58,7 @@ export const Header: React.FC = () => {
           <Typography.Text>让旅游更幸福</Typography.Text>
           <Dropdown.Button
             style={{ marginLeft: 15 }}
-            overlay={
-              <Menu
-                onClick={menuClickHandler}
-                items={state.languageList.map((l) => ({ label: l.name, key: l.code }))}
-              ></Menu>
-            }
+            overlay={<Menu onClick={menuClickHandler} items={langMenuList}></Menu>}
             icon={<GlobalOutlined />}
           >
             {state.language === 'zh' ? '中文' : 'English'}
