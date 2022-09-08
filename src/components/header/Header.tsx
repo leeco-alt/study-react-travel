@@ -5,8 +5,12 @@ import { Layout, Typography, Input, Menu, Button, Dropdown, Space } from 'antd'
 import { GlobalOutlined } from '@ant-design/icons'
 import { useNavigate, useLocation, useParams, useMatch } from 'react-router-dom'
 import store from '../../redux/store'
-import { LanguageState } from '../../redux/languageReducer'
+import { LanguageState } from '../../redux/language/languageReducer'
 import { useTranslation } from 'react-i18next'
+import {
+  addLanguageActionCreator,
+  changeLanguageActionCreator
+} from '../../redux/language/languageActions'
 
 export const Header: React.FC = () => {
   const params = useParams()
@@ -34,16 +38,10 @@ export const Header: React.FC = () => {
     // setState({ ...state, language: e.key }) // 这种方法只能改变此组件的状态
     if (e.key === 'new') {
       // 处理新语言添加 action
-      const action = {
-        type: 'add_language',
-        payload: { code: 'new_lang' + Math.random(), name: '新语言' }
-      }
+      const action = addLanguageActionCreator('新语言', 'new_lang' + Math.random())
       store.dispatch(action)
     } else {
-      const action = {
-        type: 'change_language',
-        payload: e.key
-      }
+      const action = changeLanguageActionCreator(e.key)
       store.dispatch(action)
     }
   }

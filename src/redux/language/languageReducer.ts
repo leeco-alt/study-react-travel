@@ -1,4 +1,5 @@
 import i18n from 'i18next'
+import { ADD_LANGUAGE, CHANGE_LANGUAGE, LanguageActionTypes } from './languageActions'
 
 export interface LanguageState {
   language: 'en' | 'zh'
@@ -13,14 +14,14 @@ const defaultState: LanguageState = {
   ]
 }
 
-const languageReducer = (state = defaultState, action) => {
+const languageReducer = (state = defaultState, action: LanguageActionTypes) => {
   console.log(state, action)
   // 不可以在原来数据上修改，需要新建一个 newState
   switch (action.type) {
-    case 'change_language':
+    case CHANGE_LANGUAGE:
       i18n.changeLanguage(action.payload) // 这样处理是不标准的，有副作用
       return { ...state, language: action.payload }
-    case 'add_language':
+    case ADD_LANGUAGE:
       return { ...state, languageList: [...state.languageList, action.payload] }
     default:
       return state
