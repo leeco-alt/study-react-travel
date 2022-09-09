@@ -4,13 +4,13 @@ import logo from '../../assets/logo.svg'
 import { Layout, Typography, Input, Menu, Button, Dropdown, Space } from 'antd'
 import { GlobalOutlined } from '@ant-design/icons'
 import { useNavigate, useLocation, useParams, useMatch } from 'react-router-dom'
-import store from '../../redux/store'
-import { LanguageState } from '../../redux/language/languageReducer'
 import { useTranslation } from 'react-i18next'
 import {
   addLanguageActionCreator,
   changeLanguageActionCreator
 } from '../../redux/language/languageActions'
+import { useSelector } from '../../redux/hook'
+import { useDispatch } from 'react-redux'
 
 export const Header: React.FC = () => {
   const params = useParams()
@@ -18,35 +18,22 @@ export const Header: React.FC = () => {
   const match = useMatch(location.pathname)
   const navigate = useNavigate()
   const { t } = useTranslation()
-  const storeState = store.getState()
-  const [state, setState] = useState({
-    language: storeState.language,
-    languageList: storeState.languageList
-  })
-
-  store.subscribe(() => {
-    const storeState = store.getState()
-    setState({
-      ...state,
-      language: storeState.language,
-      languageList: storeState.languageList
-    })
-  })
+  const language = useSelector((state) => state.language)
+  const languageList = useSelector((state) => state.languageList)
+  const dispatch = useDispatch()
+  // const dispatch = useDispatch<Dispatch<LanguageActionTypes>>() // 强类型定义
 
   const menuClickHandler = (e) => {
     // console.log(e)
-    // setState({ ...state, language: e.key }) // 这种方法只能改变此组件的状态
     if (e.key === 'new') {
       // 处理新语言添加 action
-      const action = addLanguageActionCreator('新语言', 'new_lang' + Math.random())
-      store.dispatch(action)
+      dispatch(addLanguageActionCreator('新语言', 'new_lang' + Math.random()))
     } else {
-      const action = changeLanguageActionCreator(e.key)
-      store.dispatch(action)
+      dispatch(changeLanguageActionCreator(e.key))
     }
   }
 
-  const langMenuList = state.languageList
+  const langMenuList = languageList
     .map((l) => ({ label: l.name, key: l.code }))
     .concat({ label: t('header.add_new_language'), key: 'new' })
 
@@ -61,7 +48,7 @@ export const Header: React.FC = () => {
             overlay={<Menu onClick={menuClickHandler} items={langMenuList}></Menu>}
             icon={<GlobalOutlined />}
           >
-            {state.language === 'zh' ? '中文' : 'English'}
+            {language === 'zh' ? '中文' : 'English'}
           </Dropdown.Button>
           <Space className={styles['button-group']}>
             <Button onClick={() => navigate('register')}>{t('header.register')}</Button>
