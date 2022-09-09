@@ -11,6 +11,7 @@ import {
 } from '../../redux/language/languageActions'
 import { useSelector } from '../../redux/hook'
 import { useDispatch } from 'react-redux'
+import { use } from 'i18next'
 
 export const Header: React.FC = () => {
   const params = useParams()
@@ -18,8 +19,11 @@ export const Header: React.FC = () => {
   const match = useMatch(location.pathname)
   const navigate = useNavigate()
   const { t } = useTranslation()
-  const language = useSelector((state) => state.language)
-  const languageList = useSelector((state) => state.languageList)
+
+  // const language = useSelector((state) => state.language)
+  // const languageList = useSelector((state) => state.languageList)
+  const { language, languageList } = useSelector((state) => state)
+
   const dispatch = useDispatch()
   // const dispatch = useDispatch<Dispatch<LanguageActionTypes>>() // 强类型定义
 
