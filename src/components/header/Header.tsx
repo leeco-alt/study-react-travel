@@ -22,7 +22,7 @@ export const Header: React.FC = () => {
 
   // const language = useSelector((state) => state.language)
   // const languageList = useSelector((state) => state.languageList)
-  const { language, languageList } = useSelector((state) => state)
+  const { language, languageList } = useSelector((state) => state.language)
 
   const dispatch = useDispatch()
   // const dispatch = useDispatch<Dispatch<LanguageActionTypes>>() // 强类型定义
