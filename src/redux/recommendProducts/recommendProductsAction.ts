@@ -1,3 +1,7 @@
+import { ThunkAction } from 'redux-thunk'
+import { RootState } from '../store'
+import axios from 'axios'
+
 export const FETCH_RECOMMEND_PRODUCTS_START = 'FETCH_RECOMMEND_PRODUCTS_START' // 正在调用推荐信息api
 export const FETCH_RECOMMEND_PRODUCTS_SUCCESS = 'FETCH_RECOMMEND_PRODUCTS_SUCCESS' // 推荐信息api调用成功
 export const FETCH_RECOMMEND_PRODUCTS_FAIL = 'FETCH_RECOMMEND_PRODUCTS_FAIL' // 推荐信息api调用失败
@@ -40,3 +44,21 @@ export const fetchRecommendProductsFailActionCreator = (
     payload: error
   }
 }
+
+// thunk 可以返回一个函数，而不一定是 js 对象
+// 在一个 thunk action 中可以完成一些连续的 action 操作
+// 并且可以处理异步逻辑
+// 业务逻辑可以从 ui 层面挪到这里，代码分层会更清晰
+export const giveMeDateActionCreator =
+  (): ThunkAction<void, RootState, unknown, RecommendProductsAction> =>
+  async (dispatch, getState) => {
+    dispatch(fetchRecommendProductsStartActionCreator())
+    try {
+      const { data } = await axios.get(
+        'http://yapi.smart-xwork.cn/mock/173267/api/productCollections'
+      )
+      dispatch(fetchRecommendProductsSuccessActionCreator(data))
+    } catch (err: any) {
+      dispatch(fetchRecommendProductsFailActionCreator(err.message))
+    }
+  }
