@@ -4,9 +4,10 @@ import axios from 'axios'
 import { Spin, Row, Col, DatePicker, Space } from 'antd'
 import styles from './DetailPage.module.css'
 import { Header, Footer, ProductIntro } from '../../components'
-import { productDetailSlice } from '../../redux/productDetail/slice'
+import { productDetailSlice, getProductDetail } from '../../redux/productDetail/slice'
 import { useSelector } from '../../redux/hook'
 import { useDispatch } from 'react-redux'
+import { AppDispatch } from "../../redux/store";
 
 const { RangePicker } = DatePicker
 
@@ -29,21 +30,10 @@ export const DetailPage: React.FC<any> = (
   const error = useSelector((state) => state.productDetail.error)
   const product = useSelector((state) => state.productDetail.data)
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatch>()
 
   useEffect(() => {
-    const fetchDate = async () => {
-      dispatch(productDetailSlice.actions.fetchStart())
-      try {
-        const { data } = await axios.get(
-          `http://123.56.149.216:8080/api/touristRoutes/${touristRouteId}`
-        )
-        dispatch(productDetailSlice.actions.fetchSuccess(data))
-      } catch (error: any) {
-        dispatch(productDetailSlice.actions.fetchFail(error.messagee))
-      }
-    }
-    fetchDate()
+    dispatch(getProductDetail(touristRouteId))
   }, [])
 
   if (loading) {
