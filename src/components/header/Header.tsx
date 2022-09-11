@@ -71,6 +71,7 @@ export const Header: React.FC = () => {
         <Input.Search
           className={styles['search-input']}
           placeholder="请输入旅游目的地、主题、或关机字"
+          onSearch={(keywords) => navigate('/search/' + keywords)}
         />
       </Layout.Header>
       <Menu mode={'horizontal'} className={styles['main-menu']}>
