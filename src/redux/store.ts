@@ -3,15 +3,17 @@ import languageReducer from './language/languageReducer'
 import recommendProductsReducer from './recommendProducts/recommendProductsReducer'
 import thunk from 'redux-thunk'
 import { actionLog } from './middlewares/actionLog'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { productDetailSlice } from './productDetail/slice'
 import { productSearchSlice } from './productSearch/slice'
-import { combineReducers, configureStore } from '@reduxjs/toolkit'
+import { userSlice } from './user/slice'
 
 const rootReducer = combineReducers({
   language: languageReducer,
   recommendProducts: recommendProductsReducer,
   productDetail: productDetailSlice.reducer,
-  productSearch: productSearchSlice.reducer
+  productSearch: productSearchSlice.reducer,
+  user: userSlice.reducer
 })
 
 // const store = createStore(rootReducer, applyMiddleware(thunk, actionLog))
