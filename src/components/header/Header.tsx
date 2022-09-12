@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styles from './Header.module.css'
 import logo from '../../assets/logo.svg'
+import jwt_decode, { JwtPayload as DefaultJwtPayload } from 'jwt-decode'
 import { Layout, Typography, Input, Menu, Button, Dropdown, Space } from 'antd'
 import { GlobalOutlined } from '@ant-design/icons'
 import { useNavigate, useLocation, useParams, useMatch } from 'react-router-dom'
@@ -11,7 +12,11 @@ import {
 } from '../../redux/language/languageActions'
 import { useSelector } from '../../redux/hook'
 import { useDispatch } from 'react-redux'
-import { use } from 'i18next'
+import { userSlice } from '../../redux/user/slice'
+
+interface JwtPayload extends DefaultJwtPayload {
+  username: string
+}
 
 export const Header: React.FC = () => {
   const params = useParams()
@@ -23,6 +28,15 @@ export const Header: React.FC = () => {
   // const language = useSelector((state) => state.language)
   // const languageList = useSelector((state) => state.languageList)
   const { language, languageList } = useSelector((state) => state.language)
+  const jwt = useSelector((s) => s.user.token)
+  const [username, setUsername] = useState('')
+
+  useEffect(() => {
+    if (jwt) {
+      const token = jwt_decode<JwtPayload>(jwt)
+      setUsername(token.username)
+    }
+  }, [jwt])
 
   const dispatch = useDispatch()
   // const dispatch = useDispatch<Dispatch<LanguageActionTypes>>() // 强类型定义
@@ -35,6 +49,12 @@ export const Header: React.FC = () => {
     } else {
       dispatch(changeLanguageActionCreator(e.key))
     }
+  }
+
+  const onLogout = () => {
+    dispatch(userSlice.actions.logout())
+    navigate('/')
+    window.location.reload()
   }
 
   const langMenuList = languageList
@@ -54,10 +74,21 @@ export const Header: React.FC = () => {
           >
             {language === 'zh' ? '中文' : 'English'}
           </Dropdown.Button>
-          <Space className={styles['button-group']}>
-            <Button onClick={() => navigate('/register')}>{t('header.register')}</Button>
-            <Button onClick={() => navigate('/signIn')}>{t('header.signin')}</Button>
-          </Space>
+          {jwt ? (
+            <Space className={styles['button-group']}>
+              <span>
+                {t('header.welcome')}
+                <Typography.Text strong>{username}</Typography.Text>
+              </span>
+              <Button onClick={() => navigate('/register')}>{t('header.shoppingCart')}</Button>
+              <Button onClick={onLogout}>{t('header.signOut')}</Button>
+            </Space>
+          ) : (
+            <Space className={styles['button-group']}>
+              <Button onClick={() => navigate('/register')}>{t('header.register')}</Button>
+              <Button onClick={() => navigate('/signIn')}>{t('header.signin')}</Button>
+            </Space>
+          )}
         </div>
       </div>
       <Layout.Header className={styles['main-header']}>
