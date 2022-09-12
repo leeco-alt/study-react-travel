@@ -55,8 +55,8 @@ export const Header: React.FC = () => {
             {language === 'zh' ? '中文' : 'English'}
           </Dropdown.Button>
           <Space className={styles['button-group']}>
-            <Button onClick={() => navigate('register')}>{t('header.register')}</Button>
-            <Button onClick={() => navigate('signIn')}>{t('header.signin')}</Button>
+            <Button onClick={() => navigate('/register')}>{t('header.register')}</Button>
+            <Button onClick={() => navigate('/signIn')}>{t('header.signin')}</Button>
           </Space>
         </div>
       </div>
