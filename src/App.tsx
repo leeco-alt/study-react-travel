@@ -12,7 +12,8 @@ import {
   RegisterPage,
   DetailPage,
   SearchPage,
-  ShoppingCartPage
+  ShoppingCartPage,
+  PlaceOrderPage
 } from './pages'
 
 // 这里是 react-router v6 的私有路由实现推荐方法
@@ -46,6 +47,14 @@ function App() {
             element={
               <RequireAuth redirectTo={'/signIn'} isAuthenticated={jwt !== null}>
                 <ShoppingCartPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/placeOrder"
+            element={
+              <RequireAuth redirectTo={'/signIn'} isAuthenticated={jwt !== null}>
+                <PlaceOrderPage />
               </RequireAuth>
             }
           />
