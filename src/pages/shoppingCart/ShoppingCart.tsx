@@ -6,13 +6,15 @@ import { ProductList, PaymentCard } from '../../components'
 import { useSelector } from '../../redux/hooks'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../../redux/store'
-import { clearShoppingCartItem } from '../../redux/shoppingCart/slice'
+import { clearShoppingCartItem, checkout } from '../../redux/shoppingCart/slice'
+import { useNavigate } from 'react-router-dom'
 
 export const ShoppingCartPage: React.FC = (props) => {
   const loading = useSelector((s) => s.shoppingCart.loading)
   const shoppingCartItems = useSelector((s) => s.shoppingCart.items)
   const jwt = useSelector((s) => s.user.token) as string
   const dispatch = useDispatch<AppDispatch>()
+  const navigate = useNavigate()
 
   return (
     <MainLayout>
@@ -35,7 +37,13 @@ export const ShoppingCartPage: React.FC = (props) => {
               price={shoppingCartItems
                 .map((s) => s.originalPrice * (s.discountPresent || 1))
                 .reduce((a, b) => a + b, 0)}
-              onCheckout={() => {}}
+              onCheckout={() => {
+                if (shoppingCartItems.length <= 0) {
+                  return
+                }
+                dispatch(checkout(jwt))
+                navigate('/placeOrder')
+              }}
               onShoppingCartClear={() => {
                 dispatch(
                   clearShoppingCartItem({ jwt, itemIds: shoppingCartItems.map((s) => s.id) })
