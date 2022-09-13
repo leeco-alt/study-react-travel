@@ -16,7 +16,7 @@ const initialState: ShoppingCartState = {
 export const getShoppingCart = createAsyncThunk(
   'shoppingCart/getShoppingCart',
   async (jwt: string | undefined, thunkAPI) => {
-    const response = await axios.get(`http://123.56.149.216:8080/api/shoppingCart}`, {
+    const response = await axios.get(`http://123.56.149.216:8080/api/shoppingCart`, {
       headers: {
         Authorization: `bearer ${jwt}`
       }
@@ -29,7 +29,7 @@ export const addShoppingCartItem = createAsyncThunk(
   'shoppingCart/addShoppingCartItem',
   async (paramaters: { jwt: string; touristRouteId: string }, thunkAPI) => {
     const response = await axios.post(
-      `http://123.56.149.216:8080/api/shoppingCart/items}`,
+      `http://123.56.149.216:8080/api/shoppingCart/items`,
       {
         touristRouteId: paramaters.touristRouteId
       },
@@ -47,7 +47,7 @@ export const clearShoppingCartItem = createAsyncThunk(
   'shoppingCart/clearShoppingCartItem',
   async (paramaters: { jwt: string; itemIds: number[] }, thunkAPI) => {
     return await axios.delete(
-      `http://123.56.149.216:8080/api/shoppingCart/items/(${paramaters.itemIds.join(',')})}`,
+      `http://123.56.149.216:8080/api/shoppingCart/items/(${paramaters.itemIds.join(',')})`,
       {
         headers: {
           Authorization: `bearer ${paramaters.jwt}`

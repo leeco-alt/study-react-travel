@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useLocation, useMatch, useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import { Spin, Row, Col, DatePicker, Anchor, Divider, Typography, Menu } from 'antd'
+import { Spin, Row, Col, DatePicker, Anchor, Divider, Typography, Menu, Button } from 'antd'
 import styles from './DetailPage.module.css'
 import { Header, Footer, ProductIntro, ProductComments } from '../../components'
 import { commentMockData } from './mockup'
 import { productDetailSlice, getProductDetail } from '../../redux/productDetail/slice'
-import { useSelector } from '../../redux/hook'
+import { useSelector } from '../../redux/hooks'
 import { useDispatch } from 'react-redux'
 import { AppDispatch } from '../../redux/store'
 import { MainLayout } from '../../layouts/mainLayout'
+import { ShoppingCartOutlined } from '@ant-design/icons'
+import { addShoppingCartItem } from '../../redux/shoppingCart/slice'
 
 const { RangePicker } = DatePicker
 
@@ -31,6 +33,8 @@ export const DetailPage: React.FC<any> = (
   const loading = useSelector((state) => state.productDetail.loading)
   const error = useSelector((state) => state.productDetail.error)
   const product = useSelector((state) => state.productDetail.data)
+  const jwt = useSelector((s) => s.user.token) as string
+  const shoppingCartLoading = useSelector((s) => s.shoppingCart.loading)
 
   const dispatch = useDispatch<AppDispatch>()
 
@@ -75,6 +79,18 @@ export const DetailPage: React.FC<any> = (
             />
           </Col>
           <Col span={11}>
+            <Button
+              style={{ marginTop: 50, marginBottom: 30, display: 'block' }}
+              type="primary"
+              danger
+              loading={shoppingCartLoading}
+              onClick={() => {
+                dispatch(addShoppingCartItem({ jwt, touristRouteId: product.id }))
+              }}
+            >
+              <ShoppingCartOutlined />
+              放入购物车
+            </Button>
             <RangePicker open style={{ marginTop: 20 }} />
           </Col>
         </Row>

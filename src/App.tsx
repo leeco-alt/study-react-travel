@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styles from './App.module.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { Navigate } from 'react-router-dom'
-import { useSelector } from './redux/hook'
+import { useSelector } from './redux/hooks'
+import { useDispatch } from 'react-redux'
+import { getShoppingCart } from './redux/shoppingCart/slice'
+import { AppDispatch } from './redux/store'
 import {
   HomePage,
   SignInPage,
@@ -13,13 +16,20 @@ import {
 } from './pages'
 
 // 这里是 react-router v6 的私有路由实现推荐方法
-const RequireAuth = ({ children, redirectTo }) => {
-  const jwt = useSelector((s) => s.user.token)
-  let isAuthenticated = jwt !== null
+const RequireAuth = ({ children, redirectTo, isAuthenticated }) => {
   return isAuthenticated ? children : <Navigate to={redirectTo} />
 }
 
 function App() {
+  const jwt = useSelector((s) => s.user.token)
+  const dispatch = useDispatch<AppDispatch>()
+
+  useEffect(() => {
+    if (jwt) {
+      dispatch(getShoppingCart(jwt))
+    }
+  }, [jwt])
+
   return (
     <div className={styles.App}>
       <BrowserRouter>
@@ -34,7 +44,7 @@ function App() {
           <Route
             path="/shoppingCart"
             element={
-              <RequireAuth redirectTo={'/signIn'}>
+              <RequireAuth redirectTo={'/signIn'} isAuthenticated={jwt !== null}>
                 <ShoppingCartPage />
               </RequireAuth>
             }

@@ -10,7 +10,7 @@ import {
   addLanguageActionCreator,
   changeLanguageActionCreator
 } from '../../redux/language/languageActions'
-import { useSelector } from '../../redux/hook'
+import { useSelector } from '../../redux/hooks'
 import { useDispatch } from 'react-redux'
 import { userSlice } from '../../redux/user/slice'
 
@@ -29,6 +29,8 @@ export const Header: React.FC = () => {
   // const languageList = useSelector((state) => state.languageList)
   const { language, languageList } = useSelector((state) => state.language)
   const jwt = useSelector((s) => s.user.token)
+  const shoppingCartItems = useSelector((s) => s.shoppingCart.items)
+  const shoppingCartLoading = useSelector((s) => s.shoppingCart.loading)
   const [username, setUsername] = useState('')
 
   useEffect(() => {
@@ -79,7 +81,9 @@ export const Header: React.FC = () => {
                 {t('header.welcome')}
                 <Typography.Text strong>{username}</Typography.Text>
               </span>
-              <Button onClick={() => navigate('/shoppingCart')}>{t('header.shoppingCart')}</Button>
+              <Button loading={shoppingCartLoading} onClick={() => navigate('/shoppingCart')}>
+                {t('header.shoppingCart')}({shoppingCartItems.length})
+              </Button>
               <Button onClick={onLogout}>{t('header.signOut')}</Button>
             </Space>
           ) : (
