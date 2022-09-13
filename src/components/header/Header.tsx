@@ -54,7 +54,6 @@ export const Header: React.FC = () => {
   const onLogout = () => {
     dispatch(userSlice.actions.logout())
     navigate('/')
-    window.location.reload()
   }
 
   const langMenuList = languageList
