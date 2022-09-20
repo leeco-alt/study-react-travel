@@ -1,3 +1,11 @@
+> **使用的技术栈：React+Typescript+Redux+ReactRouter+Antd**
+
+![1](img/截屏2022-09-20%2010.14.44.png)
+![2](img/截屏2022-09-20%2010.15.18.png)
+![3](img/截屏2022-09-20%2010.19.02.png)
+![4](img/截屏2022-09-20%2010.19.51.png)
+![5](img/截屏2022-09-20%2010.20.28.png)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
